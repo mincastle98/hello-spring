@@ -4,11 +4,23 @@ import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-@Controller     // @Component 애노테이션을 포함하고 있기 때문에 스프링 빈으로 등록 -> 컴포넌트 스캔과 자동 의존관계 설정
+@Controller
 public class MemberController {
-    private final MemberService memberService;
+    // 의존관계 주입 1. 필드 주입 -> not recommended
+    //@Autowired private final MemberService memberService;
 
-    @Autowired      // memberService를 스프링 컨테이너에 존재하는 동일한 이름의 스프링 빈과 연결시켜줌
+    // 의존관계 주입 2. setter 주입 -> 초기 세팅 이후 바뀔 일이 없는데도 불구하고 public으로 열려있어야 함
+    // memberService. -> 바로 setter를 호출할 수 있음 -> 모든 개발자가 접근하여 수정할 수 있게 됨
+/*    private MemberService memberService;
+    @Autowired
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }*/
+
+    // 의존관계 주입 3. 생성자 주입 -> recommended
+    // 세팅 시점에 한번 호출되고 끝남 -> 이후에 변경을 위해 접근할 수 없음
+    private final MemberService memberService;
+    @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
